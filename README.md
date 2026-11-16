@@ -1,6 +1,6 @@
 # Miko 贴纸实时预览
 
-公开的静态网页，保留“光泽＋立体”和“镭射贴纸”。无需 GPT 账号。
+公开的镭射材质预览网页。无需 GPT 账号。
 
 1. 在电脑打开首页，对比四款材质后点击“手机联调”。配色、强度与纹理密度会带入联调页，二维码自动展开。
 2. 用手机相机扫描二维码，在 Safari / Chrome 中打开。
@@ -21,7 +21,7 @@ PeerJS 1.5.5（MIT）经 jsDelivr 加载，PeerJS Cloud 负责连接协商，参
 ## 文件与测试
 
 - index.html：四款材质首页；materials.html 保留为同一首页的兼容入口。
-- preview.html：选中材质的手机联调页，含原有光泽＋立体模式、二维码、参数同步和手机体感。
+- preview.html：选中材质的手机联调页，仅显示当前材质的有效参数，含二维码、参数同步和手机体感。
 - material-renderer.js：联调页的四款材质渲染器，已内嵌在 preview.html。
 - sync-core.js、sync-ui.js：同步源码，已内嵌在 preview.html。
 - qrcode.js：Kazuhiko Arase 的二维码库（MIT，原版权声明保留）。
