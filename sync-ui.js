@@ -24,13 +24,17 @@
     return libraryPromise;
   }
   function lock(){
-    document.querySelectorAll('#settingsPanel input,#settingsPanel [data-mode],#settingsPanel [data-preset],#resetParameters').forEach(el=>el.disabled=viewer && following);
+    document.querySelectorAll('#settingsPanel input,#settingsPanel select,#settingsPanel [data-mode],#settingsPanel [data-preset],#resetParameters').forEach(el=>el.disabled=viewer && following);
     if(!viewer || !following)motion.refreshControls();
     $('followSync').textContent=following?'独立调节':'恢复同步';
     $('followSync').setAttribute('aria-pressed',String(following));
   }
   function renderLink(){
-    const link=new URL(location.href);link.search='';link.hash=new URLSearchParams({peer:pair.hostId,key:pair.token}).toString();
+    const link=new URL(location.href);link.search='';
+    const configuration=motion.getConfiguration();
+    const selected=configuration.modes?.laser;
+    if(selected)link.search=new URLSearchParams({material:String(selected.material ?? 0),palette:String(selected.palette ?? 1),strength:String(Math.round(selected.laser*100)),density:String(Math.round((selected.density ?? .5)*100))}).toString();
+    link.hash=new URLSearchParams({peer:pair.hostId,key:pair.token}).toString();
     $('syncLink').value=link.href;
     const code=qrcode(0,'M');code.addData(link.href);code.make();
     $('syncQR').innerHTML=code.createSvgTag({cellSize:4,margin:16,scalable:true});
@@ -72,5 +76,6 @@
   }else{
     pair=readPair();if(!validPair(pair)){pair=newPair();persistPair();}
     renderLink();
+    if(new URLSearchParams(location.search).has('material'))$('syncOptions').open=true;
   }
 })();

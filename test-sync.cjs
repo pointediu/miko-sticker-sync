@@ -43,3 +43,14 @@ test('incorrect pair secret does not disclose controller configuration',async(t)
   const guest=create({Peer,hostId:'secure-host',token:'wrong',viewer:true,applyConfiguration:()=>received++});
   t.after(()=>{guest.stop();host.stop();});await sleep(25);assert.equal(received,0);
 });
+test('material selection, palette and density sync; older configurations remain supported',async(t)=>{
+  const old=normalize(configuration());assert.equal(old.modes.laser.material,0);
+  const config=configuration();Object.assign(config.modes.laser,{material:3,palette:2,density:.78});config.mode='laser';
+  let received;
+  const host=create({Peer,hostId:'materials-host',token:'materials',getConfiguration:()=>config});
+  const guest=create({Peer,hostId:'materials-host',token:'materials',viewer:true,applyConfiguration:c=>received=c});
+  t.after(()=>{guest.stop();host.stop();});await sleep(15);
+  assert.equal(received.mode,'laser');assert.equal(received.modes.laser.material,3);assert.equal(received.modes.laser.palette,2);assert.equal(received.modes.laser.density,.78);
+  config.modes.laser.material=2;host.publish();await sleep(70);assert.equal(received.modes.laser.material,2);
+  config.modes.laser.material=1.5;assert.equal(normalize(config),null);
+});

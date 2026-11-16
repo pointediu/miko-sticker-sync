@@ -2,7 +2,7 @@
 
 公开的静态网页，保留“光泽＋立体”和“镭射贴纸”。无需 GPT 账号。
 
-1. 在电脑打开发布后的网址，展开“手机同步”。
+1. 在电脑打开首页，对比四款材质后点击“手机联调”。配色、强度与纹理密度会带入联调页，二维码自动展开。
 2. 用手机相机扫描二维码，在 Safari / Chrome 中打开。
 3. 点击“开启手机体感”并允许访问；电脑调节参数，手机同步材质效果。
 
@@ -20,10 +20,12 @@ PeerJS 1.5.5（MIT）经 jsDelivr 加载，PeerJS Cloud 负责连接协商，参
 
 ## 文件与测试
 
-- index.html：可直接发布的单文件网页，包含原贴纸矢量图、样式、二维码和同步逻辑。
-- sync-core.js、sync-ui.js：同步源码，已内嵌在 index.html。
+- index.html：四款材质首页；materials.html 保留为同一首页的兼容入口。
+- preview.html：选中材质的手机联调页，含原有光泽＋立体模式、二维码、参数同步和手机体感。
+- material-renderer.js：联调页的四款材质渲染器，已内嵌在 preview.html。
+- sync-core.js、sync-ui.js：同步源码，已内嵌在 preview.html。
 - qrcode.js：Kazuhiko Arase 的二维码库（MIT，原版权声明保留）。
-- build.py：将同步源码重新内嵌至 index.html；运行 python3 build.py。
+- build.py：将同步源码重新内嵌至 preview.html；运行 python3 build.py。
 - test-sync.cjs：Node 测试，使用内存传输验证配对、单向写入、最新参数、断线恢复与独立调节，不替代真机网络验证。
 
 运行 `node test-sync.cjs`。

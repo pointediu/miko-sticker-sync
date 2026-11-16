@@ -1,6 +1,7 @@
 'use strict';
 (function (root) {
-  const ranges = { amount:[4,42], gloss:[0,1], depth:[.5,20], laser:[0,1], saturation:[0,1], coverage:[.1,1], softness:[0,1], grain:[0,1], hueShift:[0,90], smoothing:[40,400], sensitivity:[0,1] };
+  const ranges = { amount:[4,42], gloss:[0,1], depth:[.5,20], laser:[0,1], saturation:[0,1], coverage:[.1,1], softness:[0,1], grain:[0,1], hueShift:[0,90], smoothing:[40,400], sensitivity:[0,1], material:[0,3], palette:[0,2], density:[0,1] };
+  const compatibleDefaults={material:0,palette:1,density:.5};
   function normalize(input) {
     if (!input || !['combined','laser'].includes(input.mode) || !input.modes) return null;
     const result = {mode:input.mode, modes:{}};
@@ -9,8 +10,10 @@
       if (!values || typeof values !== 'object') return null;
       result.modes[mode] = {};
       for (const [key,[min,max]] of Object.entries(ranges)) {
-        if (!Number.isFinite(values[key]) || values[key] < min || values[key] > max) return null;
-        result.modes[mode][key] = values[key];
+        const value=values[key]===undefined?compatibleDefaults[key]:values[key];
+        if (!Number.isFinite(value) || value < min || value > max) return null;
+        if (['material','palette'].includes(key) && !Number.isInteger(value)) return null;
+        result.modes[mode][key] = value;
       }
       for (const key of ['tiltEnabled','iridescence']) {
         if (typeof values[key] !== 'boolean') return null;
